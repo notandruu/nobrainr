@@ -482,7 +482,7 @@ function ResultsContent() {
 
         {/* Credits */}
         <div className="max-w-4xl mx-auto mt-8 text-center border-t border-slate-700/50 pt-6 opacity-0 animate-smooth-fade-in delay-1200">
-          <p className="text-slate-500 text-sm">© 2025 nobrainr.app · v0.9 · Reddit + AI</p>
+          <p className="text-slate-500 text-sm">© 2025 nobrainr.app · Reddit + AI</p>
         </div>
       </div>
     </div>

@@ -22,12 +22,13 @@ import { useRouter, useSearchParams } from "next/navigation"
 import Image from "next/image"
 import LoadingScreen from "@/components/loading-screen"
 import { useSmoothNavigation } from "@/hooks/use-smooth-navigation"
-import { searchProducts, type SearchResult, getPopularSearchTerms } from "@/utils/search"
+import { type SearchResult, getPopularSearchTerms } from "@/utils/search"
 
 function ResultsContent() {
   const [isLoaded, setIsLoaded] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [isSearching, setIsSearching] = useState(false)
+  const [isFetching, setIsFetching] = useState(false)
   const [currentSearchQuery, setCurrentSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
@@ -63,9 +64,20 @@ function ResultsContent() {
     // Reset search state when component mounts or query changes
     resetSearchState()
 
-    // Perform search with the query
-    const results = searchProducts(query, 10)
-    setSearchResults(results)
+    // Fetch results from Gemini via API route
+    if (query.trim()) {
+      setIsFetching(true)
+      fetch(`/api/search?q=${encodeURIComponent(query)}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data.results) setSearchResults(data.results)
+          setIsFetching(false)
+        })
+        .catch(() => {
+          setSearchResults([])
+          setIsFetching(false)
+        })
+    }
 
     // Initialize particles
     const newParticles = Array.from({ length: 30 }, (_, i) => ({
@@ -314,7 +326,14 @@ function ResultsContent() {
       {/* Product Cards */}
       <div className="px-4 md:px-6 lg:px-12 xl:px-16 pb-16">
         <div className="max-w-4xl mx-auto space-y-8">
-          {searchResults.length > 0 ? (
+          {isFetching ? (
+            <div className="text-center py-16">
+              <div className="w-16 h-16 bg-purple-500/20 rounded-full flex items-center justify-center mx-auto mb-6 animate-brain-pulse border border-purple-400/30">
+                <Brain className="w-8 h-8 text-purple-300 animate-pulse" />
+              </div>
+              <p className="text-slate-300 text-lg">Scanning Reddit for the best picks...</p>
+            </div>
+          ) : searchResults.length > 0 ? (
             searchResults.map((result, index) => {
               const { product } = result
               return (

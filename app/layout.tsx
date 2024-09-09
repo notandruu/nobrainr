@@ -10,6 +10,22 @@ export const metadata: Metadata = {
   title: "nobrainr.app - Find the Best Gaming Products Instantly",
   description:
     "AI-powered product recommendations from Reddit's gaming community. Find the best gaming gear trusted by real gamers.",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/apple-icon.png",
+  },
+  openGraph: {
+    title: "nobrainr.app - Find the Best Gaming Products Instantly",
+    description: "AI-powered product recommendations from Reddit's gaming community.",
+    images: [{ url: "/og-image.png", width: 512, height: 512, alt: "nobrainr" }],
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "nobrainr.app",
+    description: "AI-powered product recommendations from Reddit's gaming community.",
+    images: ["/og-image.png"],
+  },
 }
 
 export default function RootLayout({
@@ -20,7 +36,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <link rel="icon" href="/favicon.png" />
+        <link rel="icon" href="/favicon.png" type="image/png" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
         <meta name="theme-color" content="#131730" />
         <script
           dangerouslySetInnerHTML={{
